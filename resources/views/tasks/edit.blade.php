@@ -26,4 +26,4 @@
 
 @endsection
 
-    {!! Form::model(task, ['route' => ['tasks.update', $task->id], 'method' => 'put']) !!}
+    {!! Form::model($task, ['route' => ['tasks.update', $task->id], 'method' => 'put']) !!}
