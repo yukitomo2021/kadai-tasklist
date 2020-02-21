@@ -16,7 +16,7 @@ class TasksController extends Controller
      //getでtasks/にアクセスされた場合の「一覧表示処理」
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::paginate(25);
         
         return view('tasks.index',[
             'tasks' => $tasks,
@@ -53,7 +53,7 @@ class TasksController extends Controller
         ]);
 
         $task = new Task;
-        $task->status = $request->status;
+        $task->status = $request->status;    
         $task->content = $request->content;
         $task->save();
 
@@ -102,13 +102,13 @@ class TasksController extends Controller
     //putまたはpatchでtasks/idにアクセスされた場合の「更新処理」
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'status' => 'required|max:10',
+         $this->validate($request, [
+            'status' => 'required|max:10',  
             'content' => 'required|max:191',
         ]);
 
         $task = Task::find($id);
-        $task->status = $request->status;
+        $task->status = $request->status;    
         $task->content = $request->content;
         $task->save();
 
