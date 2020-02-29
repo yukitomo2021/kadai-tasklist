@@ -16,12 +16,29 @@ class TasksController extends Controller
      //getでtasks/にアクセスされた場合の「一覧表示処理」
     public function index()
     {
-        $tasks = Task::paginate(25);
+        $data = [];
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
+            
+            $data = [
+                'user' => $user,
+                'tasks' => $tasks,
+            ];
+        }
+        
+        return view('tasks.index', $data);
+    }
+        
+        
+        
+        /*$tasks = Task::paginate(25);
         
         return view('tasks.index',[
             'tasks' => $tasks,
-            ]);
-    }
+        ]);
+        */
+    
 
     /**
      * Show the form for creating a new resource.
@@ -35,7 +52,7 @@ class TasksController extends Controller
         
         return view('tasks.create',[
             'task' => $task,
-            ]);
+        ]);
     }
 
     /**
@@ -51,7 +68,7 @@ class TasksController extends Controller
             'status' => 'required|max:10',
             'content' => 'required|max:191',
         ]);
-
+        
         $task = new Task;
         $task->status = $request->status;    
         $task->user_id = \Auth::user()->id;
@@ -60,6 +77,22 @@ class TasksController extends Controller
         
         return redirect('/');
     }
+    
+        
+        /*$this->validate($request, [
+            'status' => 'required|max:10',
+            'content' => 'required|max:191',
+        ]);
+
+        $task = new Task;
+        $task->status = $request->status;    
+        $task->user_id = \Auth::user()->id;
+        $task->content = $request->content;
+        $task->save();
+        
+        return redirect('/');
+        */
+    
 
     /**
      * Display the specified resource.
